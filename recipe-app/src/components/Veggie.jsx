@@ -7,38 +7,38 @@ const Veggie = () => {
     const [veggie, setVeggie] = useState([]);
 
     useEffect(() => {
-        getPopular();
+        getVeggie();
     }, []);
 
-    const getPopular = async () => {
+    const getVeggie = async () => {
 
 
-        const check = localStorage.getItem('popular');
+        const check = localStorage.getItem('veggie');
         if (check) {
-            setPopular(JSON.parse(check))
+            setVeggie(JSON.parse(check))
         } else {
             const api = await fetch(
-                `https://api.spoonacular.com/recipes/random?apiKey=f98519a063a544faaab16296adae4ddb&number=9`
+                `https://api.spoonacular.com/recipes/random?apiKey=f98519a063a544faaab16296adae4ddb&number=9&tags=vegetarian`
             );
             const data = await api.json();
-            localStorage.setItem('popular', JSON.stringify(data.recipes));
-            setPopular(data.recipes);
+            localStorage.setItem('veggie', JSON.stringify(data.recipes));
+            setVeggie(data.recipes);
             console.log(data.recipes);
         }
     };
     return (
         <div>
             <Wrapper>
-                <h3>Popular Picks</h3>
+                <h3>Our Vegetarian Picks</h3>
 
                 <Splide options={{
-                    perPage: 4,
+                    perPage: 3,
                     arrows: false,
                     pagination: false,
                     drag: 'free',
                     gap: '5rem',
                 }}>
-                    {popular.map((recipe) => {
+                    {veggie.map((recipe) => {
                         return (
                             <SplideSlide key={recipe.id}>
                                 <Card>
@@ -60,7 +60,7 @@ const Wrapper = styled.div`
 `;
 
 const Card = styled.div`
-  min-height: 25rem;
+  min-height: 15rem;
   border-radius: 2rem;
   overflow: hidden;
   position: relative;
