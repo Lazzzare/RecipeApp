@@ -11,12 +11,20 @@ const Popular = () => {
     }, []);
 
     const getPopular = async () => {
-        const api = await fetch(
-            `https://api.spoonacular.com/recipes/random?apiKey=f98519a063a544faaab16296adae4ddb&number=9`
-        );
-        const data = await api.json();
-        setPopular(data.recipes);
-        console.log(data.recipes);
+
+
+        const check = localStorage.getItem('popular');
+        if (check) {
+            setPopular(JSON.parse(check))
+        } else {
+            const api = await fetch(
+                `https://api.spoonacular.com/recipes/random?apiKey=f98519a063a544faaab16296adae4ddb&number=9`
+            );
+            const data = await api.json();
+            localStorage.setItem('popular', JSON.stringify(data.recipes));
+            setPopular(data.recipes);
+            console.log(data.recipes);
+        }
     };
 
     return (
@@ -33,8 +41,8 @@ const Popular = () => {
                 }}>
                     {popular.map((recipe) => {
                         return (
-                            <SplideSlide>
-                                <Card key={recipe.key}>
+                            <SplideSlide key={recipe.id}>
+                                <Card>
                                     <p>{recipe.title}</p>
                                     <img src={recipe.image} alt="recipe-image" />
                                     <Gradient />
